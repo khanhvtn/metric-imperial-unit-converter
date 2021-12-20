@@ -38,7 +38,7 @@ function ConvertHandler() {
     } else {
       return invalidInputError("unit");
     }
-    let result = extractInputUnit[0];
+    let result = extractInputUnit[0].toLowerCase();
     return result === "l" ? "L" : result;
   };
 

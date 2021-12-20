@@ -61,6 +61,7 @@ suite("Unit Tests", function () {
       assert.equal(convertHandler.getUnit("4kg"), "kg");
       assert.equal(convertHandler.getUnit("4L"), "L");
       assert.equal(convertHandler.getUnit("4l"), "L");
+      assert.equal(convertHandler.getUnit("4MI"), "mi");
       assert.equal(convertHandler.getUnit("4mi"), "mi");
     });
     test("Return an error for an invalid input unit", function () {
