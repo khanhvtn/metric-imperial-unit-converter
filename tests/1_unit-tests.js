@@ -102,7 +102,7 @@ suite("Unit Tests", function () {
       assert.strictEqual(convertHandler.convert("4", "lbs"), 1.81437);
     });
     test("convert kg to lbs", function () {
-      assert.strictEqual(convertHandler.convert("4a", "kg"), 8.8185);
+      assert.strictEqual(convertHandler.convert("4", "kg"), 8.8185);
     });
   });
 });
