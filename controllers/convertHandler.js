@@ -1,18 +1,21 @@
 function ConvertHandler() {
   const regexInput =
     /^(\d*[.]{0,1}\d*[/]{0,1}\d*[.]{0,1}\d*|\d+)(gal|km|lbs|kg|L|mi)$/i;
-  const regexNum = /\d*[.]{0,1}\d*[/]{0,1}\d*[.]{0,1}\d*|\d+/i;
-  const regexUnit = /gal|km|lbs|kg|L|mi/i;
-  const invalidInputError = new Error("invalid unit");
+  const regexNum = /^(\d*[.]{0,1}\d*[/]{0,1}\d*[.]{0,1}\d*$|\d+)$/i;
+  const regexUnit = /^(gal|km|lbs|kg|L|mi)$/i;
+  const invalidInputError = (type) => new Error(`invalid ${type}`);
   this.getNum = function (input) {
-    if (!regexInput.test(input)) {
-      return invalidInputError;
-    }
-    if (!/\d+/.test(input)) {
+    const extractInputNum = input.match(/[\d/.]+/);
+    if (extractInputNum) {
+      if (!regexNum.test(extractInputNum[0])) {
+        return invalidInputError("number");
+      }
+    } else {
       return 1;
     }
+
     let result;
-    let numInput = input.match(regexNum)[0];
+    let numInput = extractInputNum[0];
     if (numInput.includes("/")) {
       let [left, right] = numInput.split("/");
       left = left.includes(".") ? parseFloat(left) : parseInt(left);
@@ -27,11 +30,16 @@ function ConvertHandler() {
   };
 
   this.getUnit = function (input) {
-    if (!regexInput.test(input)) {
-      return invalidInputError;
+    const extractInputUnit = input.match(/[a-z]+/i);
+    if (extractInputUnit) {
+      if (!regexUnit.test(extractInputUnit[0])) {
+        return invalidInputError("unit");
+      }
+    } else {
+      return invalidInputError("unit");
     }
-    let result = input.match(regexUnit)[0];
-    return result;
+    let result = extractInputUnit[0];
+    return result === "l" ? "L" : result;
   };
 
   this.getReturnUnit = function (initUnit) {
@@ -65,7 +73,7 @@ function ConvertHandler() {
         ? "kilometers"
         : unit === "lbs"
         ? "pounds"
-        : unit === "L"
+        : unit === "L" || unit === "l"
         ? "liters"
         : unit === "kg"
         ? "kilograms"
